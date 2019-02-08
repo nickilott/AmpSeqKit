@@ -33,7 +33,7 @@ getShortNames <- function(longnames, level="phylum"){
     # return vector of shortened names
     if (level == "phylum"){
         start <- 1
-        pattern <- "p__"
+        pattern <- ".*p__"
     }
     else if (level == "class"){
         start <- 2
@@ -56,7 +56,7 @@ getShortNames <- function(longnames, level="phylum"){
         pattern <- "s__"
     }
     
-    shortnames <- shortnames[seq(start, end, 5)]
+    shortnames <- shortnames[seq(start, end, 6)]
     shortnames <- gsub(pattern, "", shortnames)
 
     # hackaround some names having "genus cluster" nomenclature
