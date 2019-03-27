@@ -16,4 +16,6 @@ for line in inf.readlines():
     barcode, sample = data[1], data[0]
     if barcode == "":
         continue
+    if sample == "":
+        sample = barcode
     sys.stdout.write("\t".join([barcode, sample]) + "\n")
