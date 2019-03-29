@@ -35,7 +35,7 @@ multiDE <- function(counts.files, metadata, model.formula=~condition, reduced.mo
     result.set <- list()
     for (i in 1:length(infiles)){
         level <- unlist(strsplit(infiles[i], "_"))[1] 
-        countData <- read.csv(infiles[i], header=T, stringsAsFactors=F, sep="\t", row.names=1)
+        countData <- read.csv(infiles[i], header=T, stringsAsFactors=F, sep="\t", row.names=1, quote="")
 
         samples <- intersect(colnames(countData), rownames(metadata))
 
