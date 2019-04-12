@@ -14,7 +14,7 @@ source("/gfs/devel/nilott/NGSKit/R/deseq2_helper.R")
 #####################
 #####################
 
-multiDE <- function(counts.files, metadata, model.formula=~condition, reduced.model=~1){
+multiDE <- function(counts.files, metadata, feature.column=1, model.formula=~condition, reduced.model=~1){
 
     # metadata is a df
     # counts.files is a list of filenames
@@ -33,9 +33,12 @@ multiDE <- function(counts.files, metadata, model.formula=~condition, reduced.mo
     # Returns a dataframe of results at each level
 
     result.set <- list()
-    for (i in 1:length(infiles)){
-        level <- unlist(strsplit(infiles[i], "_"))[1] 
-        countData <- read.csv(infiles[i], header=T, stringsAsFactors=F, sep="\t", row.names=1, quote="")
+    for (i in 1:length(counts.files)){
+        countData <- read.csv(counts.files[i], header=T, stringsAsFactors=F, sep="\t", row.names=feature.column, quote="")
+
+        # in case files are in subdirectory
+        level <- tail(unlist(strsplit(counts.files[i], "/")), n=1)
+        level <- unlist(strsplit(level, "_"))[1] 
 
         samples <- intersect(colnames(countData), rownames(metadata))
 
@@ -55,4 +58,23 @@ multiDE <- function(counts.files, metadata, model.formula=~condition, reduced.mo
         result.set[[i]] <- res2
     }
     results <- bind_rows(result.set)
+}
+
+
+#####################
+#####################
+#####################
+
+getNumberDiff <- function(multiDE.result, padj=0.05){
+
+    levels <- unique(multiDE.result$level)
+    ndiff.all <- data.frame(matrix(nrow=1, ncol=length(levels)))
+    colnames(ndiff.all) <- levels
+    
+    for (i in 1:length(levels)){
+        dat <- multiDE.result[multiDE.result$level == levels[i],]
+	ndiff <- nrow(dat[dat$padj < padj,])
+	ndiff.all[,levels[i]] <- ndiff
+	}
+    return(ndiff.all)
 }
