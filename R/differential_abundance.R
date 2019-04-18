@@ -14,7 +14,7 @@ source("/gfs/devel/nilott/NGSKit/R/deseq2_helper.R")
 #####################
 #####################
 
-multiDE <- function(counts.files, metadata, feature.column=1, model.formula=~condition, reduced.model=~1){
+multiDE <- function(counts.files, metadata, a=10, k=10, feature.column=1, model.formula=~condition, reduced.model=~1){
 
     # metadata is a df
     # counts.files is a list of filenames
@@ -35,6 +35,9 @@ multiDE <- function(counts.files, metadata, feature.column=1, model.formula=~con
     result.set <- list()
     for (i in 1:length(counts.files)){
         countData <- read.csv(counts.files[i], header=T, stringsAsFactors=F, sep="\t", row.names=feature.column, quote="")
+
+        # filter
+	countData <- countData[rowSums(countData >= k) >= a,]
 
         # in case files are in subdirectory
         level <- tail(unlist(strsplit(counts.files[i], "/")), n=1)
