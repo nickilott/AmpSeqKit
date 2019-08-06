@@ -20,7 +20,6 @@ plotBar <- function(x, colname="ASV"){
     return(p5)
 }
 
-
 ################
 ################
 ################
@@ -44,7 +43,31 @@ plotNumberOfASVs <- function(dat){
 ################
 ################
 
+plotSampleComponents <- function(ordinate.output){
 
+    p1 <- ggplot(ordinate.output, aes(x=variable, y=value, colour=covariate, group=sample))
+    p2 <- p1 + geom_point() + geom_line()
+    p3 <- p2 + facet_wrap(~type, scale="free")
+    return(p3)
+}
 
+################
+################
+################
 
-    
+plotPrev <- function(prev.df, as.is=TRUE){
+
+    if (as.is==TRUE){
+        p1 <- ggplot(prev.df, aes(x=Taxon, y=Prevalence))
+        p2 <- p1 + geom_bar(stat="identity")
+        p3 <- p2 + theme_bw()
+        p4 <- p3 + theme(axis.text.x=element_text(angle=90))
+    }else{
+        p1 <- ggplot(prev.df, aes(x=Prevalence))
+        p2 <- p1 + geom_histogram()
+        p3 <- p2 + theme_bw()
+        p4 <- p3
+    }
+    return(p4)
+}
+
