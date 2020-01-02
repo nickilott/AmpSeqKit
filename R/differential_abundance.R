@@ -7,7 +7,7 @@
 ###########################################
 
 library(dplyr)
-source("/gfs/devel/nilott/NGSKit/R/deseq2_helper.R")
+#source("/gfs/devel/nilott/NGSKit/R/deseq2_helper.R")
 
 
 #####################
